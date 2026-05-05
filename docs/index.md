@@ -22,3 +22,19 @@ task ping         # connectivity check
 task bootstrap    # initial setup
 task update       # manual upgrade
 ```
+
+## First run
+
+`task bootstrap` already passes `--ask-pass` so the SSH password for
+`pollen` is prompted on the very first connect (before the SSH key is
+authorized). On a fresh device you usually also need the sudo password
+for privilege escalation — pass `--ask-become-pass` through to
+`ansible-playbook` via Task's `CLI_ARGS` mechanism (everything after `--`):
+
+```bash
+task bootstrap -- --ask-become-pass        # also prompt for the sudo password
+task bootstrap -- -vvv                     # verbose run
+task bootstrap -- --limit reachy-mini -C   # check-mode on a single host
+```
+
+The same `--`-passthrough works for `task update` and `task ping`.
