@@ -1,5 +1,8 @@
 .venv/
+.venv-docs/
 .ansible/
+.task/
+site/
 *.retry
 *.pyc
 __pycache__/
