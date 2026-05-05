@@ -1,0 +1,21 @@
+---
+name: Auto-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
+  pull_request_review:
+    types: [submitted]
+  check_suite:
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    uses: nolte/gh-plumbing/.github/workflows/reusable-automerge.yaml@v1.1.15
+    permissions:
+      contents: write
+      pull-requests: write

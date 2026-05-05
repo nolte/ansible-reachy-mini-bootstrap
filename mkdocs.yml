@@ -1,0 +1,22 @@
+site_name: ansible-reachy-mini-bootstrap
+site_description: Ansible bootstrap for the Reachy Mini WiFi (Raspberry Pi)
+site_url: https://nolte.github.io/ansible-reachy-mini-bootstrap/
+repo_url: https://github.com/nolte/ansible-reachy-mini-bootstrap
+repo_name: nolte/ansible-reachy-mini-bootstrap
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - content.code.copy
+
+nav:
+  - Home: index.md
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.highlight

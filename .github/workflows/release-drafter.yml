@@ -1,0 +1,18 @@
+---
+name: Release Drafter
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  draft:
+    uses: nolte/gh-plumbing/.github/workflows/reusable-release-drafter.yml@v1.1.15
+    permissions:
+      contents: write
+      pull-requests: write

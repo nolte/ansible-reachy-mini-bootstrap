@@ -1,0 +1,22 @@
+---
+- name: Update Reachy Mini
+  hosts: reachy_mini
+  become: true
+  gather_facts: true
+  tasks:
+    - name: apt full-upgrade
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: full
+        autoremove: true
+        autoclean: true
+
+    - name: Check whether a reboot is required
+      ansible.builtin.stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+
+    - name: Report reboot requirement
+      ansible.builtin.debug:
+        msg: "Reboot required after upgrade."
+      when: reboot_required.stat.exists

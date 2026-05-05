@@ -1,0 +1,82 @@
+version: "3"
+
+vars:
+  VENV: .venv
+  PY: python3
+  PIP: "{{.VENV}}/bin/pip"
+  ANSIBLE: "{{.VENV}}/bin/ansible"
+  ANSIBLE_PLAYBOOK: "{{.VENV}}/bin/ansible-playbook"
+  GALAXY: "{{.VENV}}/bin/ansible-galaxy"
+  LINT: "{{.VENV}}/bin/ansible-lint"
+  INVENTORY: inventory/hosts.yml
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+    silent: true
+
+  venv:
+    desc: Create the dedicated Python venv and install Ansible
+    sources:
+      - requirements.txt
+    generates:
+      - "{{.VENV}}/bin/ansible-playbook"
+    cmds:
+      - "{{.PY}} -m venv {{.VENV}}"
+      - "{{.PIP}} install --upgrade pip"
+      - "{{.PIP}} install -r requirements.txt"
+
+  galaxy:
+    desc: Install Ansible collections from requirements.yml
+    deps: [venv]
+    sources:
+      - requirements.yml
+    cmds:
+      - "{{.GALAXY}} collection install -r requirements.yml"
+
+  ping:
+    desc: Connectivity check against the reachy_mini group
+    deps: [venv]
+    cmds:
+      - "{{.ANSIBLE}} -i {{.INVENTORY}} reachy_mini -m ping"
+
+  bootstrap:
+    desc: One-time bootstrap (user, SSH key, baseline, unattended-upgrades)
+    deps: [galaxy]
+    cmds:
+      - "{{.ANSIBLE_PLAYBOOK}} -i {{.INVENTORY}} playbooks/site.yml --ask-become-pass {{.CLI_ARGS}}"
+
+  update:
+    desc: Run apt full-upgrade on the device
+    deps: [galaxy]
+    cmds:
+      - "{{.ANSIBLE_PLAYBOOK}} -i {{.INVENTORY}} playbooks/update.yml --ask-become-pass {{.CLI_ARGS}}"
+
+  lint:
+    desc: Run ansible-lint over playbooks/
+    deps: [venv]
+    cmds:
+      - "{{.LINT}} playbooks/"
+
+  test:
+    desc: Static checks (syntax-check + lint). Molecule integration tests come later.
+    deps: [galaxy]
+    cmds:
+      - "{{.ANSIBLE_PLAYBOOK}} -i {{.INVENTORY}} playbooks/site.yml --syntax-check"
+      - "{{.ANSIBLE_PLAYBOOK}} -i {{.INVENTORY}} playbooks/update.yml --syntax-check"
+      - task: lint
+
+  docs:
+    desc: Build the MkDocs site (smoke build)
+    cmds:
+      - "{{.PY}} -m venv {{.VENV}}-docs"
+      - "{{.VENV}}-docs/bin/pip install --upgrade pip"
+      - "{{.VENV}}-docs/bin/pip install -r docs/requirements.txt"
+      - "{{.VENV}}-docs/bin/mkdocs build --strict"
+
+  clean:
+    desc: Remove the venvs
+    cmds:
+      - rm -rf {{.VENV}} {{.VENV}}-docs site/

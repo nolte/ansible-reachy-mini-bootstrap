@@ -1,0 +1,15 @@
+---
+- name: Ensure target user exists and is in sudo group
+  ansible.builtin.user:
+    name: "{{ target_user }}"
+    state: present
+    shell: /bin/bash
+    groups: sudo
+    append: true
+
+- name: Authorize SSH public key for target user
+  ansible.posix.authorized_key:
+    user: "{{ target_user }}"
+    key: "{{ ssh_authorized_key }}"
+    state: present
+    exclusive: false

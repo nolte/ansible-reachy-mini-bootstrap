@@ -1,0 +1,9 @@
+---
+- name: Bootstrap Reachy Mini
+  hosts: reachy_mini
+  become: true
+  gather_facts: true
+  roles:
+    - common
+    - user
+    - unattended_upgrades

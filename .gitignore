@@ -1,0 +1,6 @@
+.venv/
+.ansible/
+*.retry
+*.pyc
+__pycache__/
+vault-pw.txt

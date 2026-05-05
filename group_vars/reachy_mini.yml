@@ -1,0 +1,29 @@
+---
+target_user: pollen
+
+# Public-Key wird zur Laufzeit aus pass(1) auf dem Control-Host gelesen.
+# Voraussetzung: `pass show private/keyfiles/ssh/private_ed25519/id_ed25519.pub`
+# liefert genau eine OpenSSH-authorized_keys-Zeile.
+ssh_authorized_key: >-
+  {{ lookup('pipe', 'pass show private/keyfiles/ssh/private_ed25519/id_ed25519.pub') }}
+
+timezone: Europe/Berlin
+
+baseline_packages:
+  - ca-certificates
+  - curl
+  - gnupg
+  - htop
+  - sudo
+  - vim
+
+# unattended-upgrades
+unattended_upgrades_origins:
+  - "origin=Debian,codename=${distro_codename},label=Debian"
+  - "origin=Debian,codename=${distro_codename},label=Debian-Security"
+  - "origin=Debian,codename=${distro_codename}-security,label=Debian-Security"
+  - "origin=Raspbian,codename=${distro_codename},label=Raspbian"
+  - "origin=Raspberry Pi Foundation,codename=${distro_codename},label=Raspberry Pi Foundation"
+
+unattended_upgrades_automatic_reboot: false
+unattended_upgrades_automatic_reboot_time: "03:00"
