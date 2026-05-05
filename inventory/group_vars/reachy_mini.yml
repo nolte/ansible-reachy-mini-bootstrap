@@ -1,13 +1,6 @@
 ---
-target_user: pollen
-
-# Public-Key wird zur Laufzeit aus pass(1) auf dem Control-Host gelesen.
-# Voraussetzung: `pass show private/keyfiles/ssh/private_ed25519/id_ed25519.pub`
-# liefert genau eine OpenSSH-authorized_keys-Zeile.
-ssh_authorized_key: >-
-  {{ lookup('pipe', 'pass show private/keyfiles/ssh/private_ed25519/id_ed25519.pub') }}
-
-timezone: Europe/Berlin
+# target_user, ssh_authorized_key und timezone stehen im Inventory
+# (inventory/hosts.yml), damit sie pro Host überschreibbar sind.
 
 baseline_packages:
   - ca-certificates
