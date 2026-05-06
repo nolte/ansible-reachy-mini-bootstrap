@@ -29,13 +29,13 @@ All developer commands run through Task (`Taskfile.yml`):
 ## Layout (Ansible repository convention)
 
 ```
-ansible.cfg                  # collections_path, defaults
-inventory/hosts.yml          # target host(s)
-group_vars/reachy_mini.yml   # shared variables
-playbooks/                   # site.yml, update.yml
-roles/                       # common, user, unattended_upgrades
-requirements.yml             # ansible-galaxy collections
-requirements.txt             # python (ansible, ansible-lint)
+ansible.cfg                          # collections_path, defaults
+inventory/hosts.yml                  # target host(s) + per-host overrides
+inventory/group_vars/reachy_mini.yml # shared variables (next to the inventory!)
+playbooks/                           # site.yml, update.yml
+roles/                               # common, user, unattended_upgrades
+requirements.yml                     # ansible-galaxy collections
+requirements.txt                     # python (ansible, ansible-lint)
 ```
 
 The repository deliberately uses the Ansible standard top-level
@@ -43,12 +43,28 @@ layout — wrapping it under `src/` would break `ansible-playbook`'s
 default role and inventory discovery. This is documented as an
 exception in `nolte/claude-shared:spec/project/project-structure/`.
 
+## Repository profile
+
+This repo declares itself as **`single-environment-bootstrap`** per
+`nolte/claude-shared:spec/ansible/playbook-development/` — exactly one
+target device (`reachy-mini.local`), no `<env>` segment in the
+inventory, and inline `roles/<name>/` directories that hold
+device-specific configuration not consumed by any other repository.
+The moment a second repository would consume one of these roles, that
+role MUST be extracted into its own role repo per
+`spec/ansible/role-development/` and pulled in via `requirements.yml`.
+
 ## Conventions Claude must respect
 
 - **SSH public key comes from `pass`**, not from a tracked file.
-  `group_vars/reachy_mini.yml` resolves it via
-  `lookup('pipe', 'pass show private/keyfiles/ssh/private_ed25519/id_ed25519.pub')`.
+  `inventory/hosts.yml` resolves it via
+  `lookup('pipe', 'pass show private/keyfiles/ssh/private_ed25519/id_ed25519.pub')`
+  (sits next to `target_user` and `timezone` so it's per-host overridable).
   Don't move the key into the repo or `.env`.
+- **`group_vars/` lives next to the inventory** (`inventory/group_vars/`),
+  not at the repo root. Top-level `group_vars/` is only picked up when
+  `playbook_dir` equals the repo root, which is not the case here
+  because playbooks live under `playbooks/`.
 - **No silent password disablement.** SSH password auth is left
   enabled so the operator can't lock themselves out — flip it via a
   variable, not a default.

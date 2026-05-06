@@ -52,18 +52,18 @@ task update    -- --limit reachy-mini
 
 ```
 ansible.cfg
-inventory/hosts.yml          # Zielhost: reachy-mini.local, user pollen
-group_vars/reachy_mini.yml   # Variablen (Key-Lookup, timezone, upgrade-policy)
+inventory/hosts.yml                  # Zielhost: reachy-mini.local, user pollen
+inventory/group_vars/reachy_mini.yml # Variablen (baseline_packages, upgrade-policy)
 playbooks/
-  site.yml                   # Bootstrap
-  update.yml                 # Voll-Update auf Abruf
+  site.yml                           # Bootstrap
+  update.yml                         # Voll-Update auf Abruf
 roles/
-  common/                    # apt-baseline + timezone
-  user/                      # pollen + authorized_keys
-  unattended_upgrades/       # automatische Updates
-requirements.txt             # Python: ansible, ansible-lint
-requirements.yml             # Ansible-Collections
-Taskfile.yml                 # venv + Targets
+  common/                            # apt-baseline + timezone
+  user/                              # pollen + authorized_keys
+  unattended_upgrades/               # automatische Updates
+requirements.txt                     # Python: ansible, ansible-lint
+requirements.yml                     # Ansible-Collections
+Taskfile.yml                         # venv + Targets
 ```
 
 ## Inventory anpassen
