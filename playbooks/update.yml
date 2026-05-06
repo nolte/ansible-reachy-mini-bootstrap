@@ -4,7 +4,7 @@
   become: true
   gather_facts: true
   tasks:
-    - name: apt full-upgrade
+    - name: Apt full-upgrade
       ansible.builtin.apt:
         update_cache: true
         upgrade: full
