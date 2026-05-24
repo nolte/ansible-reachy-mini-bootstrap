@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   draft:
-    uses: nolte/gh-plumbing/.github/workflows/reusable-release-drafter.yml@v1.1.15
+    uses: nolte/gh-plumbing/.github/workflows/reusable-release-drafter.yml@v1.1.19
     permissions:
       contents: write
       pull-requests: write
