@@ -1,0 +1,19 @@
+# Portfolio manifest for nolte/ansible-reachy-mini-bootstrap.
+# Schema: spec/portfolio/portfolio-management/ §Capability inventory per repository
+# Audience references resolve against AUDIENCES.md at the repo root.
+
+capabilities:
+  - name: reachy-mini-ansible-provisioning
+    description: >-
+      An Ansible playbook and role collection that bootstraps a Reachy Mini WiFi
+      device (Raspberry Pi OS) to a working state — network, system
+      dependencies, and the Pollen/Reachy runtime — from a single inventory plus
+      playbook run.
+    audience:
+      - "`nolte` (repo author, first operator on his own device)"
+      - "Reachy Mini owner / hobbyist"
+    status: active
+    rationale: >-
+      This repository owns the device-provisioning automation for the Reachy
+      Mini in the nolte portfolio; the Ansible source lives here so any owner
+      reaches an identical device state from one run.
