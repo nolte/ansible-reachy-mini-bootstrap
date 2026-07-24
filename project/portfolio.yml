@@ -17,3 +17,6 @@ capabilities:
       This repository owns the device-provisioning automation for the Reachy
       Mini in the nolte portfolio; the Ansible source lives here so any owner
       reaches an identical device state from one run.
+
+    peers:
+      - "reachy-mini-app:reachy-mini-behavior-app"
